@@ -3,6 +3,7 @@
 {-# LANGUAGE FlexibleContexts    #-}
 {-# LANGUAGE LambdaCase          #-}
 {-# LANGUAGE OverloadedStrings   #-}
+{-# LANGUAGE PackageImports      #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeFamilies        #-}
 
@@ -96,8 +97,8 @@ import Network.GRPC.HTTP2.Types
 import Network.GRPC.HTTP2.Encoding
 import Network.HTTP2
 import Network.HPACK
-import Network.HTTP2.Client hiding (next)
-import Network.HTTP2.Client.Helpers
+import "http2-client" Network.HTTP2.Client hiding (next)
+import "http2-client" Network.HTTP2.Client.Helpers
 
 type CIHeaderList = [(CI ByteString, ByteString)]
 
@@ -193,7 +194,7 @@ open conn authority extraheaders timeout encoding decoding call = do
     let request = [ (":method", "POST")
                   , (":scheme", "http")
                   , (":authority", authority)
-                  , (":path", path rpc) 
+                  , (":path", path rpc)
                   , (CI.original grpcTimeoutH, showTimeout timeout)
                   , (CI.original grpcEncodingH, grpcCompressionHV compress)
                   , (CI.original grpcAcceptEncodingH, mconcat [grpcAcceptEncodingHVdefault, ",", grpcCompressionHV decompress])
@@ -439,7 +440,7 @@ data OutgoingEvent i b =
 -- One loop accepts and chunks messages from the HTTP2 stream, then return events
 -- and stops on Trailers or Invalid. The other loop waits for messages to send to
 -- the server or finalize and returns.
-generalHandler 
+generalHandler
   :: (GRPCInput r i, GRPCOutput r o)
   => r
   -- ^ RPC to call.

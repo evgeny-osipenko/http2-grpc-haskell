@@ -1,0 +1,11 @@
+resolver: lts-20.22
+packages:
+  - http2-grpc-types
+  - http2-grpc-proto-lens
+  - http2-grpc-proto3-wire
+  - warp-grpc
+  - http2-client-grpc
+  - bench-tool
+extra-deps:
+  - http2-client-0.10.0.0
+  - proto3-wire-1.4.0
